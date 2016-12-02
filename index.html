@@ -4,14 +4,17 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
-
+		<title>Using Gestures in Angular 2 with Typescript</title>
+		<meta name="author" content="Steve Schwarz">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/white.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
-
+		<style>
+			.reveal var { font-family: monospace; font-size: 85%;}
+		</style>
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
@@ -24,14 +27,104 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h2>Using Gestures in Angular 2 with Typescript</h2>
+					<p>
+						<small>Created by <a href="http://tech.agilitynerd.com">Steve Schwarz</a> / <a href="http://twitter.com/steveaschwarz">@steveaschwarz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Synthetic Image Cropping Component</h2>
+					<div class="container">
+						<app-root>Loading...</app-root>
+					</div>
+					<script type="text/javascript" src="inline.js"></script>
+					<script type="text/javascript" src="styles.b52d2076048963e7cbfd.bundle.js"></script>
+					<script type="text/javascript" src="main.9ec939f6b3ef7f6373b2.bundle.js"></script>
+				</section>
+				<section>
+					<h2>Angular 2 Gesture Support</h2>
+						<div style="text-align:left;">
+						<p>Built-in mappings for <a hef="http://hammerjs.github.io/">Hammer.js</a> touch gesture events:</p>
+						<ul>
+							<li>Rotate</li>
+							<li>Pinch</li>
+							<li>Press</li>
+							<li>Pan</li>
+							<li>Tap</li>
+							<li>Swipe</li>
+						</ul>
+						<p>Does <strong>not</strong> unify mouse and gesture events.
+					</div>
+				</section>
+				<section>
+					<h2>Basic Usage</h2>
+					<div style="text-align:left;">
+						<p>Install HammerJS and <var>touch-action</var> polyfill:</p>
+						<pre><code class="hljs">$ npm install hammerjs hammer-timejs</code></pre>
+						<p>Each gesture defines multiple events:</p>
+						<p><var>pan</var>, <var>panstart</var>, <var>panmove</var>, <var>panend</var>, <var>pancancel</var>, <var>panleft</var>, <var>panright</var>, <var>panup</var>, <var>pandown</var></li>
+						</p>
+						<p>Bind events in template(s) and inject event:</p>
+							<pre><code class="hljs">&lt;div class="thing-to-move"
+ (panstart)="onPanStart($event)"
+ (panmove)="onPan($event)"&gt; Content of .thing-to-move &lt/div&gt;</code></pre>
+					</div>
+				</section>
+				<section>
+					<h2>Gesture events</h2>
+					<div style="text-align:left">
+						<p>Event <var>delta</var> properties are relative to <var>start</var> events.</p>
+						<p>Want display to update during gestures, so we need to update bound properties in template as events occur.</p>
+						<p>Define event handlers in component:</p>
+							<pre><code class="hljs">onPanStart(event: any): void {
+  event.preventDefault();
+  this.startX = this.x;
+  this.startY = this.y;
+}
+
+onPan(event: any): void {
+  event.preventDefault();
+  this.x = this.startX + event.deltaX;
+  this.y = this.startY + event.deltaY;
+}
+</code></pre>
+					</div>
+				</section>
+				<section>
+					<h2>Emulating Touch Events</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+<script src="/hammerjs/touch-emulator.js"></script>
+<script>TouchEmulator();</script>
+					</code></pre>
+					<p style="text-align:left;">Use mouse/touch pad and shift key to emulate multi-finger gestures during development.</p>
+				</section>
+				<section>
+					<h2>Define Directives for Reuse</h2>
+				</section>
+				<section>
+					<h2>Caveats</h2>
+					<div style="text-align:left">
+					<p>Vertical <var>pan</var> events can be delayed due to scroll handling. Consider:</p>
+					<pre>
+						<code class="hljs">document.body.addEventListener('touchmove', function(event) {
+  event.preventDefault();
+}, false);
+						</code>
+					</pre>
+					<p>Mobile <var>viewport</var> settings can impact gestures (i.e. zoom):<p>
+					<pre><code class="hljs"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></code></pre>
+					</div>
+				</section>
+				<section><h2>Resources</h2>
+					<ul>
+						<li>//www.html5rocks.com/en/mobile/touch/</li>
+					</ul>
+				</section>
 			</div>
 		</div>
-
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.js"></script>
-
 		<script>
 			// More info https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
