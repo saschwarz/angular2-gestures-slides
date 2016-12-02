@@ -3,11 +3,14 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
+import 'hammerjs';
+import 'hammer-timejs';
+
+import { DemoOne } from './app.component-one';
 
 @NgModule({
   declarations: [
-    AppComponent
+    DemoOne
   ],
   imports: [
     BrowserModule,
@@ -15,6 +18,6 @@ import { AppComponent } from './app.component';
     HttpModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [DemoOne]
 })
 export class AppModule { }
