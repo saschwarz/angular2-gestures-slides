@@ -7,10 +7,14 @@ import 'hammerjs';
 import 'hammer-timejs';
 
 import { DemoOne } from './app.component-one';
+import { DemoTwo } from './app.component-two';
+import { DragMoveDirective } from './drag-move.directive';
 
 @NgModule({
   declarations: [
-    DemoOne
+    DemoOne,
+    DemoTwo,
+    DragMoveDirective
   ],
   imports: [
     BrowserModule,
@@ -18,6 +22,6 @@ import { DemoOne } from './app.component-one';
     HttpModule
   ],
   providers: [],
-  bootstrap: [DemoOne]
+  bootstrap: [DemoOne, DemoTwo]
 })
 export class AppModule { }
