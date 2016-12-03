@@ -16,7 +16,6 @@ export class DragMoveDirective {
     // hammerjs events give deltas since start of gesture so
     // capture the initial values so I can apply the deltas for
     // each event and update the view.
-    console.log([this.dX, this.dY]);
     this.startX = this.dX;
     this.startY = this.dY;
   }
