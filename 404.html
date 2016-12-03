@@ -1,0 +1,266 @@
+<!doctype html>
+<html>
+	<head><base href="/demo/">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>Using Gestures in Angular 2 with Typescript</title>
+		<meta name="author" content="Steve Schwarz">
+		<link rel="stylesheet" href="assets/css/reveal.css">
+		<link rel="stylesheet" href="assets/css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="assets/lib/css/zenburn.css">
+		<style>
+			.reveal var { font-family: monospace; font-size: 85%;}
+		</style>
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'assets/css/print/pdf.css' : 'assets/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	<link href="styles.d41d8cd98f00b204e9800998ecf8427e.bundle.css" rel="stylesheet"></head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>Using Gestures in Angular 2 with Typescript</h2>
+					<p>
+						<small>Created by <a href="http://tech.agilitynerd.com">Steve Schwarz</a> / <a href="http://twitter.com/steveaschwarz">@steveaschwarz</a></small>
+					</p>
+				</section>
+				<section>
+					<h2>Synthetic Image Cropping Component</h2>
+					<div class="container">
+					</div>
+				</section>
+				<section>
+					<h2>Angular 2 Gesture Support</h2>
+						<div style="text-align:left;">
+						<p>Built-in mappings for <a hef="http://hammerjs.github.io/">Hammer.js</a> touch gesture events:</p>
+						<ul>
+							<li>Rotate</li>
+							<li>Pinch</li>
+							<li>Press</li>
+							<li>Pan</li>
+							<li>Tap</li>
+							<li>Swipe</li>
+						</ul>
+						<p>Does <strong>not</strong> unify mouse and gesture events.
+					</div>
+				</section>
+				<section>
+					<h2>HammerJS Setup</h2>
+					<div style="text-align:left;">
+						<p>Install HammerJS and <var>touch-action</var> polyfill:</p>
+						<pre><code class="hljs">$ npm install hammerjs hammer-timejs</code></pre>
+						<p>Add includes to <var>app.module.ts</var> so they'll be used/bundled:</p>
+						<pre><code>import 'hammerjs';
+import 'hammer-timejs';</code></pre>
+					</div>
+				</section>
+				<section>
+					<h2>Gesture Events</h2>
+					<div style="text-align:left;">
+						<p>Each gesture defines multiple events:</p>
+						<p><var>pan</var>, <var>panstart</var>, <var>panmove</var>, <var>panend</var>, <var>pancancel</var>, <var>panleft</var>, <var>panright</var>, <var>panup</var>, <var>pandown</var></li>
+						</p>
+						<p>Bind desired events in template(s) and inject event for use in handler:</p>
+							<pre><code class="hljs">&lt;div class="thing-to-move"
+ (panstart)="onPanStart($event)"
+ (panmove)="onPan($event)"&gt; Move Me! &lt/div&gt;</code></pre>
+					</div>
+				</section>
+				<section>
+					<h2>Gesture Event Handlers</h2>
+					<div style="text-align:left">
+						<p>Move events fire many, many times...</p>
+						<p>Define event handlers in component to update component <var>x</var>, <var>y</var> properties:</p>
+							<pre><code class="hljs">private x: number = 0;
+private y: number = 0;
+private startX: number = 0;
+private startY: number = 0;
+
+onPanStart(event: any): void {
+  event.preventDefault();
+  this.startX = this.x;
+  this.startY = this.y;
+}
+
+onPan(event: any): void {
+  event.preventDefault();
+  this.x = this.startX + event.deltaX;
+  this.y = this.startY + event.deltaY;
+}
+</code></pre>
+					</div>
+				</section>
+				<section>
+					<h2>Update Template to Move Element</h2>
+					<div style="text-align:left">
+						<p>Want to update element's position during gestures, use bound properties in template:</p>
+					<pre><code class="hljs" data-trim contenteditable>&lt;div [style.marginLeft.px]="x" [style.marginTop.px]="y" ...&gt;
+  &lt;div&gt;Move Me!&lt;/div&gt;
+  &lt;div&gt;({{x}}, {{y}})&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+					</div>
+				</section>
+				<section>
+					<h2>Demo Component</h2>
+					<pre><code class="hljs" data-trim contenteditable>import { Component } from '@angular/core';
+@Component({
+  selector: 'demo-one',
+  styles: ['.demo-one {width:200px;height:200px;background-color: slateblue;color: #fff;}',
+           '.demo-one:hover {cursor:pointer}'],
+  template: `<div class="demo-one" [style.marginLeft.px]="x" [style.marginTop.px]="y" (panstart)="onPanStart($event)" (panmove)="onPan($event)">
+    <div class="label">{{title}}</div>
+    <div class="location">({{x}}, {{y}})</div>
+  </div>`
+})
+export class DemoOne {
+  private x: number = 0;
+  private y: number = 0;
+  private startX: number = 0;
+  private startY: number = 0;
+  private title = 'Drag Me!';
+
+  onPanStart(event: any): void {
+    this.startX = this.x;
+    this.startY = this.y;
+  }
+
+  onPan(event: any): void {
+    event.preventDefault();
+    this.x = this.startX + event.deltaX;
+    this.y = this.startY + event.deltaY;
+  }
+}</code></pre>
+				</section>
+				<section>
+					<h2>Draggable Component</h2>
+					<div class="container">
+						<div style="width:100%;height:400px;border: 1px solid red;overflow:hidden;">
+							<demo-one>Loading...</demo-one>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h2>Define Directives for Reuse</h2>
+						<div style="text-align:left">
+							<p>Put gesture code in a directive taking two inputs and outputing a <var>locationChange</var> event:</p>
+							<pre><code class="hljs" data-trim contenteditable>
+import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+
+@Directive({
+  selector: '[dragmove]'
+})
+export class DragMoveDirective {
+  @Input() x;
+  @Input() y;
+  @Output() locationChange = new EventEmitter<any>();
+
+  private startX = 0;
+  private startY = 0;
+
+  @HostListener('panstart', ['$event']) protected onPanStart(event) {
+    event.preventDefault();
+    this.startX = this.x;
+    this.startY = this.y;
+  }
+
+  @HostListener('panmove', ['$event']) protected onPanMove(event) {
+    event.preventDefault();
+    this.x = this.startX + event.deltaX;
+    this.y = this.startY + event.deltaY;
+    this.locationChange.emit({x: this.x, y: this.y});
+  }
+}</code></pre>
+					</div>
+				</section>
+				<section>
+					<h2>Update Our Component</h2>
+						<div style="text-align:left">
+							<pre><code class="hljs" data-trim contenteditable>
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'demo-two',
+  styles: ['.demo-two {width:200px;height:200px;background-color: lightgreen;color: #fff;}',
+           '.demo-two:hover {cursor:pointer}'],
+  template: `<div class="demo-two" dragmove [dX]="x" [dY]="y" (locationChange)="onPan($event)"
+    [style.marginLeft.px]="x" [style.marginTop.px]="y">
+    <div class="label">{{title}}</div>
+    <div class="location">({{x}}, {{y}})</div>
+  </div>`
+})
+export class DemoTwo {
+  private x: number = 50;
+  private y: number = 50;
+  private title = 'Drag Me!';
+
+  protected onPan(event: any): void {
+    this.x = event.x;
+    this.y = event.y;
+  }
+}</code></pre>
+					</div>
+				</section>
+				<section>
+					<div class="container">
+						<h2>Component With Drag Move Directive</h2>
+						<div style="width:100%;height:400px;border: 1px solid red;overflow:hidden;">
+							<demo-two>Loading...</demo-two>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h2>Emulating Touch Events</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+&lt;script src="/hammerjs/touch-emulator.js"&gt;&lt;/script&gt;
+&lt;script&gt;TouchEmulator();&gt;&lt;/script&gt;
+					</code></pre>
+					<p style="text-align:left;">Use mouse/touch pad and shift key to emulate multi-finger gestures during development.</p>
+				</section>
+				<section>
+					<h2>Caveats</h2>
+					<div style="text-align:left">
+					<p>Vertical <var>pan</var> events can be delayed due to scroll handling. Consider:</p>
+					<pre>
+						<code class="hljs">document.body.addEventListener('touchmove', function(event) {
+  event.preventDefault();
+}, false);
+						</code>
+					</pre>
+					<p>Mobile <var>viewport</var> settings can impact gestures (i.e. zoom):<p>
+					<pre><code class="hljs"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></code></pre>
+					</div>
+				</section>
+				<section><h2>Resources</h2>
+					<ul>
+						<li>This presentation: <a href="https://github.com/saschwarz/angular2-gestures-slides">https://github.com/saschwarz/angular2-gestures-slides</a></li>
+						<li><a href="https://scotch.io/tutorials/using-hammerjs-touch-gesture-in-angular-2">https://scotch.io/tutorials/using-hammerjs-touch-gesture-in-angular-2</a></li>
+						<li><a href="http://www.html5rocks.com/en/mobile/touch/">http://www.html5rocks.com/en/mobile/touch/</a></li>
+					</ul>
+				</section>
+			</div>
+		</div>
+		<script src="assets/lib/js/head.min.js"></script>
+		<script src="assets/js/reveal.js"></script>
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'assets/plugin/markdown/marked.js' },
+					{ src: 'assets/plugin/markdown/markdown.js' },
+					{ src: 'assets/plugin/notes/notes.js', async: true },
+					{ src: 'assets/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+</html>
+<script type="text/javascript" src="inline.d41d8cd98f00b204e980.bundle.js"></script><script type="text/javascript" src="styles.b2328beb0372c051d06d.bundle.js"></script><script type="text/javascript" src="main.da3e5167b0360f5cc891.bundle.js"></script>
