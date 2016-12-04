@@ -6,8 +6,4 @@ The presentation is available at: [https://saschwarz.github.io/angular2-gestures
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.21.
 
-It also uses the awesome (reveal.js)[http://lab.hakim.se/reveal-js/#/] for the actual presentation.
-
-## Deploying to Github Pages
-
-Run `ng github-pages:deploy` to deploy to Github Pages.
+It also uses the awesome [reveal.js](http://lab.hakim.se/reveal-js/#/) for the actual presentation.
