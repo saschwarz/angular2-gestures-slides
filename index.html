@@ -151,7 +151,8 @@ onPan(event: any): void {
   selector: 'demo-one',
   styles: ['.demo-one {width:200px;height:200px;background-color: slateblue;color: #fff;}',
            '.demo-one:hover {cursor:pointer}'],
-  template: `<div class="demo-one" [style.marginLeft.px]="x" [style.marginTop.px]="y" (panstart)="onPanStart($event)" (panmove)="onPan($event)">
+  template: `<div class="demo-one" [style.marginLeft.px]="x" [style.marginTop.px]="y"
+    (panstart)="onPanStart($event)" (panmove)="onPan($event)">
     <div class="label">{{title}}</div>
     <div class="location">({{x}}, {{y}})</div>
   </div>`
@@ -196,7 +197,7 @@ import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/c
 export class DragMoveDirective {
   @Input() x;
   @Input() y;
-  @Output() locationChange = new EventEmitter<any>();
+  @Output() locationChange = new EventEmitter&lt;any&gt;();
 
   private startX = 0;
   private startY = 0;
@@ -226,7 +227,8 @@ import { Component } from '@angular/core';
   selector: 'demo-two',
   styles: ['.demo-two {width:200px;height:200px;background-color: lightgreen;color: #fff;}',
            '.demo-two:hover {cursor:pointer}'],
-  template: `<div class="demo-two" dragmove [dX]="x" [dY]="y" (locationChange)="onPan($event)"
+  template: `<div class="demo-two" dragmove [dX]="x" [dY]="y"
+    (locationChange)="onPan($event)"
     [style.marginLeft.px]="x" [style.marginTop.px]="y">
     <div class="label">{{title}}</div>
     <div class="location">({{x}}, {{y}})</div>
@@ -304,7 +306,7 @@ export class DemoTwo {
 			});
 		</script>
 		<script>
-			// Add maximize/minimize "buttons" on hljs divs
+			// Add maximize/minimize "buttons" to parents of hljs divs
 			hs=[].slice.call(document.getElementsByClassName('hljs'))
 			hs.forEach(function(el){
 				var plus = document.createElement('span'), minus = document.createElement('span');
