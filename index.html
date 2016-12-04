@@ -13,6 +13,39 @@
 		<style>
 			.reveal var { font-family: monospace; font-size: 85%;}
 			.resources a { font-size: 70%; }
+			.reveal .fullscreen {
+				width: 1000px;
+				height: 600px;
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: 100;
+				max-height: none;
+				margin-top: -20px;
+			}
+			.reveal .plus, .reveal .minus {
+				color: #d3d3d3;
+				z-index: 200;
+				font-size: 32px;
+				position: absolute;
+				top: 0px;
+			}
+			.reveal .plus {
+				left: 880px;
+			}
+			.reveal .minus {
+				left: 990px;
+				display: none;
+			}
+			.reveal .plus:hover, .reveal .minus:hover {
+				cursor: pointer;
+				color: #000;
+			}
+			@media print {
+				.reveal .minus, .reveal .plus {
+					display: none;
+				}
+			}
 		</style>
 		<!-- Printing and PDF exports -->
 		<script>
@@ -59,7 +92,7 @@
 					<h2>HammerJS Setup</h2>
 					<div style="text-align:left;">
 						<p>Install HammerJS and <var>touch-action</var> polyfill:</p>
-						<pre><code class="hljs">$ npm install hammerjs hammer-timejs</code></pre>
+						<pre><code class="hljs bash">$ npm install hammerjs hammer-timejs</code></pre>
 						<p>Add includes to <var>app.module.ts</var> so they'll be used/bundled:</p>
 						<pre><code>import 'hammerjs';
 import 'hammer-timejs';</code></pre>
@@ -72,7 +105,7 @@ import 'hammer-timejs';</code></pre>
 						<p><var>pan</var>, <var>panstart</var>, <var>panmove</var>, <var>panend</var>, <var>pancancel</var>, <var>panleft</var>, <var>panright</var>, <var>panup</var>, <var>pandown</var></li>
 						</p>
 						<p>Bind desired events in template(s) and inject event for use in handler:</p>
-							<pre><code class="hljs">&lt;div class="thing-to-move"
+							<pre><code class="typescript hljs">&lt;div class="thing-to-move"
  (panstart)="onPanStart($event)"
  (panmove)="onPan($event)"&gt; Move Me! &lt/div&gt;</code></pre>
 					</div>
@@ -82,7 +115,7 @@ import 'hammer-timejs';</code></pre>
 					<div style="text-align:left">
 						<p>Move events fire many, many times...</p>
 						<p>Define event handlers in component to update component <var>x</var>, <var>y</var> properties:</p>
-							<pre><code class="hljs">private x: number = 0;
+							<pre><code class="typescript hljs">private x: number = 0;
 private y: number = 0;
 private startX: number = 0;
 private startY: number = 0;
@@ -113,7 +146,7 @@ onPan(event: any): void {
 				</section>
 				<section>
 					<h2>Demo Component</h2>
-					<pre><code class="hljs" data-trim contenteditable>import { Component } from '@angular/core';
+					<pre><code class="hljs typescript" data-trim contenteditable>import { Component } from '@angular/core';
 @Component({
   selector: 'demo-one',
   styles: ['.demo-one {width:200px;height:200px;background-color: slateblue;color: #fff;}',
@@ -154,7 +187,7 @@ export class DemoOne {
 					<h2>Define Directives for Reuse</h2>
 						<div style="text-align:left">
 							<p>Put gesture code in a directive taking two inputs and outputing a <var>locationChange</var> event:</p>
-							<pre><code class="hljs" data-trim contenteditable>
+							<pre><code class="hljs typescript" data-trim contenteditable>
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Directive({
@@ -186,7 +219,7 @@ export class DragMoveDirective {
 				<section>
 					<h2>Update Our Component</h2>
 						<div style="text-align:left">
-							<pre><code class="hljs" data-trim contenteditable>
+							<pre><code class="hljs typescript" data-trim contenteditable>
 import { Component } from '@angular/core';
 
 @Component({
@@ -241,7 +274,7 @@ export class DemoTwo {
 						</code>
 					</pre>
 					<p>Mobile <var>viewport</var> settings can impact gestures (i.e. zoom):<p>
-					<pre><code class="hljs"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></code></pre>
+					<pre><code class="hljs html"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></code></pre>
 					</div>
 				</section>
 				<section class="resources"><h2>Resources</h2>
@@ -269,6 +302,28 @@ export class DemoTwo {
 					{ src: 'assets/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
+		</script>
+		<script>
+			// Add maximize/minimize "buttons" on hljs divs
+			hs=[].slice.call(document.getElementsByClassName('hljs'))
+			hs.forEach(function(el){
+				var plus = document.createElement('span'), minus = document.createElement('span');
+				plus.appendChild(document.createTextNode('+'));
+				el.parentElement.appendChild(plus);
+				plus.addEventListener('click', function(){
+					el.className = el.className + ' fullscreen';
+				  minus.style.display = 'block';
+				  this.style.display = 'none';});
+				plus.className = 'plus';
+
+				minus.appendChild(document.createTextNode('-'));
+				el.parentElement.appendChild(minus);
+				minus.addEventListener('click', function(){
+					el.className = el.className.split(' ').filter(function(c){ return c !== 'fullscreen'}).join(' ');
+				  plus.style.display = 'block';
+				  this.style.display = 'none'; });
+				minus.className = 'minus';
+		    });
 		</script>
 </html>
 <script type="text/javascript" src="inline.d41d8cd98f00b204e980.bundle.js"></script><script type="text/javascript" src="styles.b2328beb0372c051d06d.bundle.js"></script><script type="text/javascript" src="main.da3e5167b0360f5cc891.bundle.js"></script>
