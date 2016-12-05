@@ -12,10 +12,10 @@
 		<link rel="stylesheet" href="assets/lib/css/zenburn.css">
 		<style>
 			.reveal var { font-family: monospace; font-size: 85%;}
-			.resources a { font-size: 70%; }
+			.resources a, .demo a { font-size: 70%; }
 			.reveal .fullscreen {
 				width: 1000px;
-				height: 600px;
+				height: 700px;
 				position: fixed;
 				top: 0;
 				left: 0;
@@ -66,17 +66,17 @@
 					</p>
 				</section>
 				<section>
-					<div class="container">
+					<div class="container demo">
 						<div style="height:400px">
 						<img src="assets/images/ImageCropComponent.png" />
 						</div>
-						<p>Demo at: <a href="https://saschwarz.github.io/angular2-image-crop/index.html">https://saschwarz.github.io/angular2-image-crop/index.html</a></p>
+						<p><a href="https://saschwarz.github.io/angular2-image-crop/index.html">https://saschwarz.github.io/angular2-image-crop/index.html</a></p>
 					</div>
 				</section>
 				<section>
 					<h2>Angular 2 Gesture Support</h2>
 						<div style="text-align:left;">
-						<p>Built-in mappings for <a hef="http://hammerjs.github.io/">Hammer.js</a> touch gesture events:</p>
+						<p>Built-in mappings for <a href="http://hammerjs.github.io/">Hammer.js</a> touch gesture events:</p>
 						<ul>
 							<li>Rotate</li>
 							<li>Pinch</li>
@@ -102,19 +102,22 @@ import 'hammer-timejs';</code></pre>
 					<h2>Gesture Events</h2>
 					<div style="text-align:left;">
 						<p>Each gesture defines multiple events:</p>
-						<p><var>pan</var>, <var>panstart</var>, <var>panmove</var>, <var>panend</var>, <var>pancancel</var>, <var>panleft</var>, <var>panright</var>, <var>panup</var>, <var>pandown</var></li>
+						<p><var>pan</var>, <var>panstart</var>, <var>panmove</var>, <var>panend</var>, <var>pancancel</var>, <var>panleft</var>, <var>panright</var>, <var>panup</var>, <var>pandown</var>
 						</p>
 						<p>Bind desired events in template(s) and inject event for use in handler:</p>
-							<pre><code class="typescript hljs">&lt;div class="thing-to-move"
+							<pre><code class="html hljs">&lt;div class="thing-to-move"
  (panstart)="onPanStart($event)"
- (panmove)="onPan($event)"&gt; Move Me! &lt/div&gt;</code></pre>
+ (panmove)="onPan($event)"&gt; Move Me! &lt;div&gt;</code></pre>
 					</div>
 				</section>
 				<section>
 					<h2>Gesture Event Handlers</h2>
 					<div style="text-align:left">
-						<p>Move events fire many, many times...</p>
-						<p>Define event handlers in component to update component <var>x</var>, <var>y</var> properties:</p>
+						<ul>
+							<li>Capture model property's initial values on <var><em>event</em>start</var>.</li>
+							<li>Adjust model property value(s) by adding <var><em>event</em>move</var> deltas to initial values.</li>
+						</ul>
+						<p>Define event handlers to update component <var>x</var>, <var>y</var> properties:</p>
 							<pre><code class="typescript hljs">private x: number = 0;
 private y: number = 0;
 private startX: number = 0;
@@ -255,28 +258,38 @@ export class DemoTwo {
 					</div>
 				</section>
 				<section>
-					<h2>Emulating Touch Events</h2>
-					<pre><code class="hljs" data-trim contenteditable>
-&lt;script src="/hammerjs/touch-emulator.js"&gt;&lt;/script&gt;
-&lt;script&gt;TouchEmulator();&gt;&lt;/script&gt;
-					</code></pre>
+					<h2>Tips</h2>
 					<div style="text-align:left">
 						<p>Use mouse/touch pad and shift key to emulate multi-finger gestures during development.</p>
-						<p>Chrome can emulate gestures.</p>
+						<pre><code class="hljs html" data-trim contenteditable>
+&lt;script src="/hammerjs/touch-emulator.js"&gt;&lt;/script&gt;
+&lt;script&gt;TouchEmulator();&gt;&lt;/script&gt;
+						</code></pre>
+						<p>Chrome Dev Tools can <a href="https://dzone.com/articles/mobile-emulation-google-chrome"> emulate gestures</a>.</p>
+						<p>Mobile <var>viewport</var> settings can impact gestures (i.e. zoom):</p>
+						<pre><code class="hljs html">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"&gt;</code></pre>
 					</div>
 				</section>
 				<section>
-					<h2>Caveats</h2>
+					<h2>Tips</h2>
 					<div style="text-align:left">
-					<p>Vertical <var>pan</var> events can be delayed due to scroll handling. Consider:</p>
-					<pre>
-						<code class="hljs">document.body.addEventListener('touchmove', function(event) {
+						<p>Vertical <var>pan</var> events can be delayed due to scroll handling. Consider:</p>
+						<pre>
+							<code class="hljs">document.body.addEventListener('touchmove', function(event) {
   event.preventDefault();
-}, false);
-						</code>
-					</pre>
-					<p>Mobile <var>viewport</var> settings can impact gestures (i.e. zoom):<p>
-					<pre><code class="hljs html"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></code></pre>
+}, false);</code>
+						</pre>
+						<p>Disable default image drag:</p>
+						<pre>
+							<code class="hljs typescript">import { Directive, HostListener } from '@angular/core';
+@Directive({
+  selector: '[preventDefault]'
+})
+export class MouseDownPreventDefaultDirective {
+  @HostListener('mousedown', ['$event']) protected onPMouseDown(event) {
+      event.preventDefault();
+  }
+}</code></pre>
 					</div>
 				</section>
 				<section class="resources"><h2>Resources</h2>
