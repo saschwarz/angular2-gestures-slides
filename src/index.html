@@ -104,7 +104,7 @@ import 'hammer-timejs';</code></pre>
 						<p>Each gesture defines multiple events:</p>
 						<p><var>pan</var>, <var>panstart</var>, <var>panmove</var>, <var>panend</var>, <var>pancancel</var>, <var>panleft</var>, <var>panright</var>, <var>panup</var>, <var>pandown</var>
 						</p>
-						<p>Bind desired events in template(s) and inject event for use in handler:</p>
+						<p>Bind desired events in template(s) and <var>$event</var> for use in handler:</p>
 							<pre><code class="html hljs">&lt;div class="thing-to-move"
  (panstart)="onPanStart($event)"
  (panmove)="onPan($event)"&gt; Move Me! &lt;div&gt;</code></pre>
@@ -113,12 +113,12 @@ import 'hammer-timejs';</code></pre>
 				<section>
 					<h2>Gesture Event Handlers</h2>
 					<div style="text-align:left">
+						<p>Event handlers update component <var>x</var>, <var>y</var> properties:</p>
 						<ul>
 							<li>Capture model property's initial values on <var><em>event</em>start</var>.</li>
 							<li>Adjust model property value(s) by adding <var><em>event</em>move</var> deltas to initial values.</li>
 						</ul>
-						<p>Define event handlers to update component <var>x</var>, <var>y</var> properties:</p>
-							<pre><code class="typescript hljs">private x: number = 0;
+						<pre><code class="typescript hljs">private x: number = 0;
 private y: number = 0;
 private startX: number = 0;
 private startY: number = 0;
