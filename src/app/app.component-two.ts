@@ -11,11 +11,11 @@ import { Component } from '@angular/core';
   </div>`
 })
 export class DemoTwo {
-  private x: number = 50;
-  private y: number = 50;
-  private title = 'Drag Me!';
+  public x: number = 50;
+  public y: number = 50;
+  public title = 'Drag Me!';
 
-  protected onPan(event: any): void {
+  public onPan(event: any): void {
     this.x = event.x;
     this.y = event.y;
   }
