@@ -186,12 +186,12 @@ onPan(event: any): void {
   </div>`
 })
 export class DemoOne {
-  public x: number = 0;
-  public y: number = 0;
-  public title = 'Drag Me!';
+  x: number = 0;
+  y: number = 0;
+  title = 'Drag Me!';
 
-  private startX: number = 0;
-  private startY: number = 0;
+  startX: number = 0;
+  startY: number = 0;
 
   onPanStart(event: any): void {
     this.startX = this.x;
@@ -228,8 +228,8 @@ export class DragMoveDirective {
   @Input() y;
   @Output() locationChange = new EventEmitter&lt;any&gt;();
 
-  private startX = 0;
-  private startY = 0;
+  startX = 0;
+  startY = 0;
 
   @HostListener('panstart', ['$event']) protected onPanStart(event) {
     event.preventDefault();
@@ -264,11 +264,11 @@ import { Component } from '@angular/core';
   </div>`
 })
 export class DemoTwo {
-  public x: number = 50;
-  public y: number = 50;
-  public title = 'Drag Me!';
+  x: number = 50;
+  y: number = 50;
+  title = 'Drag Me!';
 
-  public onPan(event: any): void {
+  onPan(event: any): void {
     this.x = event.x;
     this.y = event.y;
   }
